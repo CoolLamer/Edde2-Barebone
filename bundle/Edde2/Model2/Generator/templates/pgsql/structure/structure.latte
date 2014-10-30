@@ -1,0 +1,23 @@
+{contentType text/plain}
+{if $rebuild === true}
+	DROP SCHEMA IF EXISTS public CASCADE;
+	CREATE SCHEMA public;
+{/if}
+
+{foreach $loaderService as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+CREATE TABLE{if $rebuild !== true} IF NOT EXISTS{/if} {$connection->delimite($modelConfig->getSourceName())} (
+	{foreach $modelConfig->getPrimaryList() as $property}
+	{$connection->delimite($property->getName())} SERIAL PRIMARY KEY NOT NULL,
+	{/foreach}
+	{foreach $modelConfig->getPropertyList() as $property}
+		{continueIf $property->isVirtual()}
+	{$connection->delimite($property->getName())} {if $property->isBind()}INT{else}{$driver->typeToDatabase($property->getType())}{/if}{if $property->hasDefault()} DEFAULT {$connection->quote($property->getDefault())}{/if}{sep},
+{/sep}
+	{/foreach}
+
+);
+{sep}
+
+{/sep}
+{/foreach}

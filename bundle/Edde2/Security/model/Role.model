@@ -1,0 +1,10 @@
+name: Role
+default:
+	nullable: true
+property:
+	role:
+		bind: Role
+	name:
+		unique: true
+		nullable: false
+	description:

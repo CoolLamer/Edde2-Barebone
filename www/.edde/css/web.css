@@ -1,0 +1,42 @@
+.message .flash {
+	margin: 6px 0;
+	padding: 4px 10px 4px 6px;
+	background-color: #FCFCFC;
+	box-shadow: 1px 1px 1px #DADADA;
+	border-left: 4px solid #DFDFDF;
+	font-size: 1em;
+}
+
+.message .flash:hover {
+	background-color: #F6F6F6;
+}
+
+.message i.closable {
+	padding-top: 4px;
+	color: #000;
+	cursor: pointer;
+	font-size: 1.1em;
+	opacity: 0.3;
+}
+
+.message i.closable:hover {
+	opacity: 0.4;
+}
+
+.message .flash.success {
+	border-color: #CFE5C6;
+	background-color: #E7FFDD;
+	box-shadow: 1px 1px 1px #CFE5C6;
+}
+
+.message .flash.warning {
+	border-color: #DDD3C2;
+	background-color: #FFF3E2;
+	box-shadow: 1px 1px 1px #DDD3C2;
+}
+
+.message .flash.error {
+	border-color: #E2BDC1;
+	background-color: #FFE6E6;
+	box-shadow: 1px 1px 1px #E2BDC1;
+}

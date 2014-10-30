@@ -1,0 +1,6 @@
+<div n:snippet="flash-message" class="message units-row">
+	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">
+		{$flash->message}
+		<i class="fa fa-times closable right" data-close="div"></i>
+	</div>
+</div>

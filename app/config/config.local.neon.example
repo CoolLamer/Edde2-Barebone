@@ -1,0 +1,18 @@
+parameters:
+	connection:
+		driver: pgsql
+		database: sandbox
+		user: sandbox
+		password: sandbox
+		options:
+			lazy: true
+	cache:
+		prefix: sandbox-local-
+nette:
+	session:
+		debugger: true
+services:
+	cacheStorage: Nette\Caching\Storages\DevNullStorage
+	nette.latteFactory:
+		setup:
+			- setTempDirectory(null)

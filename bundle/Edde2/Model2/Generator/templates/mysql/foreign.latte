@@ -1,0 +1,12 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{var $bindList = $modelConfig->getBindList()}
+	{continueIf count($bindList) === 0}
+	{foreach $bindList as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$builder->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{$property->getName()}_fkey FOREIGN KEY ({$builder->delimite($property->getName())}) REFERENCES {$builder->delimite($property->getBind()->getSourceName())}({$builder->delimite('id')});
+	{/foreach}
+{sep}
+
+{/sep}
+{/foreach}

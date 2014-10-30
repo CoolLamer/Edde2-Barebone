@@ -1,0 +1,12 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{var $requiredList = $modelConfig->getRequiredList()}
+	{continueIf count($requiredList) === 0}
+	{foreach $requiredList as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$builder->delimite($modelConfig->getSourceName())} MODIFY {$builder->delimite($property->getName())} {if $property->isBind()}INT{else}{$builder->type($property->getType())}{/if}{if !$property->isNullable()} NOT NULL{/if}{if $property->hasDefault()} DEFAULT {$property->getDefault()}{/if}{if $property->hasComment()} COMMENT {$builder->escape($property->getComment())}{/if};
+	{/foreach}
+{sep}
+
+{/sep}
+{/foreach}

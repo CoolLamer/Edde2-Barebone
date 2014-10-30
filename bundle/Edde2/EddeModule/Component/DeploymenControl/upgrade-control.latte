@@ -1,0 +1,19 @@
+<h3>Aktualizace aplikace</h3>
+{control FlashMessageControl}
+<p>
+	Pro snadnou aktualizaci již běžící aplikace použijte tuto komponentu; stačí poskytnout kompatibilní balíček (obraz) aplikace.
+</p>
+<p>
+	<b> Upgrade aplikace je bezpečná akce, která se postará o případné vrácení akce zpět v případě nezdaru. </b>
+</p>
+{form $form class => 'ajax'}
+	<div class="units-row">
+		{label image/}
+	</div>
+	<div class="units-row">
+		{input image}
+	</div>
+	<div class="units-row">
+		{input upload class => 'btn'}
+	</div>
+{/form}

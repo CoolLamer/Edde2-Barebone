@@ -1,0 +1,6 @@
+name: Resource
+property:
+	name:
+		unique: true
+	description:
+		nullable: true

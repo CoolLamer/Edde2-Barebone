@@ -1,0 +1,10 @@
+{* zapnuti null a vytvoreni foreign constraintu *}
+SET CONSTRAINTS ALL DEFERRED;
+{foreach $loaderService as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{foreach $modelConfig->getPropertyList() as $property}
+		{* zajímají mě pouze property, které jsou vzdálenými klíči a vzžadují vazbu (teoreticky všechny/většina) *}
+		{continueIf $property->isVirtual() || !$property->isBind() || $property->isNullable()}
+ALTER TABLE {$connection->delimite($modelConfig->getSourceName())} ALTER COLUMN {$connection->delimite($property->getName())} DROP NOT NULL;
+	{/foreach}
+{/foreach}

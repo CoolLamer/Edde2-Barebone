@@ -1,0 +1,18 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+DROP TABLE IF EXISTS {$builder->delimite($modelConfig->getSourceName())};
+CREATE TABLE {$builder->delimite($modelConfig->getSourceName())} (
+	{foreach $modelConfig->getPrimaryList() as $property}
+	{$builder->delimite($property->getName())} INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	{/foreach}
+	{foreach $modelConfig->getPropertyList() as $property}
+		{continueIf $property->isVirtual()}
+	{$builder->delimite($property->getName())} {if $property->isBind()}INT{else}{$builder->type($property->getType())}{/if}{if $property->hasDefault()} DEFAULT {$builder->escape($property->getDefault())}{else} DEFAULT NULL{/if}{sep},
+{/sep}
+	{/foreach}
+
+) ENGINE=InnoDB{if $modelConfig->hasComment()}, COMMENT={$builder->escape($modelConfig->getComment())}{/if};
+{sep}
+
+{/sep}
+{/foreach}

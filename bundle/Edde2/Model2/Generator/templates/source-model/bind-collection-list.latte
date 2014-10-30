@@ -1,0 +1,11 @@
+{foreach $config->getMnList() as $target}
+		/**
+		 * @return {$target[1]->getName()}Query|{$target[1]->getName()}Model[]
+		 */
+		public function collection{$target[1]->getName()}From{$target[0]->getName()}() {
+			return $this->query()->mn('{$target[1]->getName()}', '{$target[0]->getName()}');
+		}{sep}
+
+		{/sep}
+{/foreach}
+

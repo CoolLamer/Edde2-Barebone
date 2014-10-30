@@ -1,0 +1,10 @@
+extend: UserRole
+property:
+	from:
+		type: datetime
+		nullable: true
+		comment: 'Od kdy je dané členství v roli platné.'
+	until:
+		type: datetime
+		nullable: true
+		comment: 'Do kdy je dané členství v roli platné.'

@@ -1,0 +1,6 @@
+/.idea/workspace.xml
+*.local.neon
+*.pid
+*.log
+.app
+/www/index.php

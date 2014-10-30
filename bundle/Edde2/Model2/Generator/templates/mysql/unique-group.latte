@@ -1,0 +1,11 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{var $uniqueList = $modelConfig->getUniqueGroupList()}
+	{continueIf count($uniqueList) === 0}
+	{foreach $uniqueList as $name => $group}
+ALTER TABLE {$builder->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{implode('_', $group)}_ukey UNIQUE ({foreach $group as $property}{$builder->delimite($property->getName().($property->isBind() ? '_id' : null))}{sep}, {/sep}{/foreach});
+	{/foreach}
+{sep}
+
+{/sep}
+{/foreach}

@@ -1,0 +1,8 @@
+parameters:
+	cache:
+		prefix: sandbox-devel-
+nette:
+	session:
+		debugger: true
+services:
+	cacheStorage: Nette\Caching\Storages\MemcachedStorage

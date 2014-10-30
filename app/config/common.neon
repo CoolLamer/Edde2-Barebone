@@ -1,0 +1,26 @@
+parameters:
+	router:
+		- Nette\Application\Routers\CliRouter
+		- CommonRouter
+	loader:
+		- %tempDir%/model
+	model:
+		# přípona souborů s modely (dle této přípony se budou vyhledávat)
+		mask: *.model
+		# kořenový adresář pro vyhledávání modelů
+		path: %appDir%
+		# namespace modelů, do kterého se vygenerují
+		namespace: App
+		# nastavení generátoru
+		generator:
+			path: %tempDir%/model
+		import-path: %appDir%
+php:
+	date.timezone: Europe/Prague
+	zlib.output_compression: yes
+
+nette:
+	debugger:
+		stricMode: true
+		maxLen: 4096
+		maxDepth: 4

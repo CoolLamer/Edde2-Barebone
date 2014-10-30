@@ -1,0 +1,4 @@
+name: User
+rule:
+	email:
+		- Edde2\Validator\Common\EmailValidator('Email není validní.')

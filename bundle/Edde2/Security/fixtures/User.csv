@@ -1,0 +1,4 @@
+User
+login;name;email;password;token
+root;root;root@example.com;aB1234;53349a019ef3cd4ae16f5e9e91cc8a535cefa06f
+guest;Dear Guest;guest@example.com;;

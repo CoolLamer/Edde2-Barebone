@@ -1,0 +1,73 @@
+{* zpracování getterů, setterů a has-value funkcí *}
+{foreach $config->getPropertyList() as $property}
+	{* zpracování bindů a virtuálních vlastností proběhne později *}
+	{continueIf $property->isVirtual() || $property->isBind()}
+	{if !$property->isPrimary()}
+		/**
+		{if $property->hasComment()}
+		 * {$property->getComment()}
+		 *
+		{/if}
+		 * @param {$generator->getPhpType($property->getType())} $a{$property->getCamelName()}
+		 *
+		 * @return $this
+		 */
+		public function set{$property->getCamelName()}($a{$property->getCamelName()}) {
+		{if $generator->isBool($property->getType())}
+			$this->set('{$property->getName()}', ((bool)$a{$property->getCamelName()}) === true ? 1 : 0);
+			return $this;
+		{else}
+			{if $generator->isDateTime($property->getType())}
+			$this->set('{$property->getName()}', DateTime::from($a{$property->getCamelName()}));
+			{else}
+			$this->set('{$property->getName()}', $a{$property->getCamelName()});
+			{/if}
+			return $this;
+		{/if}
+		}
+
+	{/if}
+	{if $generator->isBool($property->getType())}
+		/**
+		{if $property->hasComment()}
+		 * {$property->getComment()}
+		 *
+		{/if}
+		 * @return bool
+		 */
+		public function is{$property->getCamelName()}() {
+			return $this->get('{$property->getName()}') === 1;
+		}
+	{else}
+		/**
+		{if $property->hasComment()}
+		 * {$property->getComment()}
+		 *
+		{/if}
+		 * @return {$generator->getPhpType($property->getType())}
+		 */
+		public function get{$property->getCamelName()}() {
+			return $this->get('{$property->getName()}');
+		}
+		{if !$property->isPrimary()}
+
+		/**
+		{if $property->hasComment()}
+		 * {$property->getComment()}
+		 *
+		{/if}
+		 * @return bool
+		 */
+		public function has{$property->getCamelName()}Value() {
+			return $this->get('{$property->getName()}') !== null;
+		}
+		{/if}
+	{/if}
+
+		public function is{$property->getCamelName()}Changed() {
+			return $this->changed('{$property->getName()}');
+		}
+		{sep}
+
+	{/sep}
+{/foreach}

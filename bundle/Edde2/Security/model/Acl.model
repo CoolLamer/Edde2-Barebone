@@ -1,0 +1,23 @@
+name: Acl
+default:
+	nullable: true
+property:
+	role:
+		bind: Role
+		nullable: false
+	resource:
+		bind: Resource
+	privilege:
+		bind: Privilege
+	access:
+		type: bool
+		nullable: false
+		default: 0
+		comment: 'Flag, který říká, zda daný přístup je povolený (== 1) či nikoli (== 0)'
+	from:
+		type: datetime
+		nullable: true
+		comment: 'Datum a čas, od kdy je dané pravidlo aktivní.'
+	until:
+		type: datetime
+		comment: 'Datum a čas, do kdy je daný ACL záznam platný - např. dočasný ban přihlášení, vlastnosti, ...'

@@ -1,0 +1,4 @@
+name: User
+rule:
+	password:
+		- Edde2\Sanitizer\Common\PasswordFilter

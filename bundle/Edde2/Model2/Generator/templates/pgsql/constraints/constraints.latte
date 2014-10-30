@@ -1,0 +1,37 @@
+{foreach $loaderService as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{* zapnutí NULL nad patřičnými sloupci *}
+	{foreach $modelConfig->getRequiredList() as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$connection->delimite($modelConfig->getSourceName())} ALTER COLUMN {$connection->delimite($property->getName())} SET NOT NULL;
+	{/foreach}
+	{* přidání vzdálených klíčů s podporou reference až v době commitu (v transakci) - bez toho by nefungoval import dat *}
+	{foreach $modelConfig->getBindList() as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$connection->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{$property->getName()}_fkey FOREIGN KEY ({$connection->delimite($property->getName())}) REFERENCES {$connection->delimite($property->getBind()->getSourceName())}({$connection->delimite('id')}) DEFERRABLE INITIALLY IMMEDIATE;
+	{/foreach}
+	{* zapnutí unique klíčů *}
+	{foreach $modelConfig->getUniqueList() as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$connection->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{$property->getName()}_ukey UNIQUE ({$connection->delimite($property->getName())});
+	{/foreach}
+	{* zapnutí unique klíče nad více sloupci *}
+	{foreach $modelConfig->getUniqueGroupList() as $name => $group}
+ALTER TABLE {$connection->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{implode('_', $group)}_ukey UNIQUE ({foreach $group as $property}{$connection->delimite($property->getName().($property->isBind() ? '_id' : null))}{sep}, {/sep}{/foreach});
+	{/foreach}
+	{* zapnutí indexů *}
+	{foreach $modelConfig->getIndexGroupList() as $name => $group}
+CREATE INDEX {$modelConfig->getSourceName()}_{implode('_', $group)}_idx ON {$connection->delimite($modelConfig->getSourceName())} ({foreach $group as $property}{$connection->delimite($property->getName())}{sep}, {/sep}{/foreach});
+	{/foreach}
+	{* přidání komentářů, kde jsou přítomné - tabulka/sloupce *}
+	{if $modelConfig->hasComment()}
+COMMENT ON TABLE {$connection->delimite($modelConfig->getSourceName())} IS {$connection->quote($modelConfig->getComment())};
+	{/if}
+	{foreach $modelConfig->getPropertyList() as $property}
+		{continueIf !$property->hasComment() || $property->isVirtual()}
+COMMENT ON COLUMN {$connection->delimite($modelConfig->getSourceName())}.{$connection->delimite($property->getName())} IS {$connection->quote($property->getComment())};
+	{/foreach}
+{sep}
+
+{/sep}
+{/foreach}

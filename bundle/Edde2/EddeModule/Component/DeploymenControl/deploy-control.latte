@@ -1,0 +1,22 @@
+<h3>Publikace aplikace</h3>
+{control FlashMessageControl}
+<p>
+	Tato komponenta je určena pro publikování aplikace nebo obnovení do výchozího stavu. Smyslem je poskytnout ZIP soubor, kterým se nahradí aktuální instance aplikace a její databáze.
+</p>
+<p>
+	<b> Pozor! Tato akce <i>nevytváří</i> zálohu aplikace ani její databáze; typickým příkladem použití je prvotní nasazení aplikace nebo její obnovení do výchozího stavu (s případným načtením výchozích dat).</b>
+</p>
+{form $form class => 'ajax'}
+	<div class="units-row">
+		{label image/}
+	</div>
+	<div class="units-row">
+		{input image}
+	</div>
+	<div class="units-row">
+		<div class="unit-100">{input redirect}</div>
+	</div>
+	<div class="units-row">
+		{input upload class => 'btn'}
+	</div>
+{/form}

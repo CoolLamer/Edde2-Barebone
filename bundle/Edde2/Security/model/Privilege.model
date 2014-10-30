@@ -1,0 +1,6 @@
+name: Privilege
+property:
+	name:
+		unique: true
+	description:
+		nullable: true

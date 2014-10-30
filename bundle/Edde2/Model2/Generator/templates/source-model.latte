@@ -1,0 +1,58 @@
+{contentType text/plain}
+	namespace {$namespace}\Model;
+
+	use Edde2\Model2\Config\Config;
+	use Edde2\Model2\Model;
+	use Nette\Utils\DateTime;
+	{foreach $loader as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	use {$namespace}\Query\{$modelConfig->getName()}Query;
+	{/foreach}
+
+	{if $config->hasComment()}
+	/**
+	 * {$config->getComment()}
+	 */
+	{/if}
+	class {$config->getName()}Model extends Model {
+		/**
+		 * Explicitní konstruktor modelu je zde přítomný z důvodu vyhrazení modelu pod konkrétní kontext holderu; není možné jej použít v jiném kontextu.
+		 *
+		 * @param {$holderClass} $aHolder konkrétní kontext (holder), pod který tento model patří; kategoricky přísluší právě pod daný holder, nelze jej použít jinak
+		 * @param Config $aModelConfig konfigurace modelu - nese vlasntosti a další potřebné informace pro správnou funkci modelu
+		 */
+		public function __construct({$holderClass} $aHolder, Config $aModelConfig) {
+			parent::__construct($aHolder, $aModelConfig);
+		}
+
+		{include 'source-model/property-list.latte'}
+
+		{include 'source-model/bind-list.latte'}
+
+		/**
+		 * @return {$config->getName()}Query
+		 */
+		public function query() {
+			return $this->holder()->query{$config->getName()}($this);
+		}
+
+		/**
+		 * @param string|int|null $aResolve
+		 *
+		 * @return {$config->getName()}Model
+		 */
+		public function load($aResolve) {
+			return $this->query()->load($aResolve);
+		}
+
+		/**
+		 * @return {$holderClass}
+		 */
+		public function holder() {
+			return parent::holder();
+		}
+
+		{include 'source-model/collection-list.latte'}
+
+		{include 'source-model/bind-collection-list.latte'}
+	}

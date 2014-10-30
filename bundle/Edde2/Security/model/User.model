@@ -1,0 +1,18 @@
+name: User
+default:
+	nullable: true
+property:
+	login:
+		nullable: false
+		unique: true
+	name:
+		nullable: false
+	email:
+	password:
+	token:
+	stamp:
+		type: datetime
+unique:
+	- {login, token}
+bind:
+	- Role

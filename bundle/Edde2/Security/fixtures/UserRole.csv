@@ -1,0 +1,4 @@
+UserRole
+user;role
+login: root;name: root
+login: guest;name: guest

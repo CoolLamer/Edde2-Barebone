@@ -1,0 +1,11 @@
+<h3>Sestavení aplikace</h3>
+{control FlashMessageControl}
+<p>
+	Nebezpečná komponenta, kterou lze vynutit znovusestavení datábáze a zdrojových souborů aplikace.
+</p>
+<p>
+	<b>Neopatrným použitím této komponenty riskujete ztrátu dat z databáze (dojde k načtení výchozích dat)!</b>
+</p>
+<button class="simple-ajax btn btn-yellow" data-ajax="{link sources}">Sestavit zdrojové soubory</button>
+<button class="simple-ajax btn btn-red" {if $debugMode !== true}data-confirm="Opravdu si přejete přegenerovat aktuální databázi? Ztratíte tak veškerá data!"{/if} data-ajax="{link database}">Sestavit databázi</button>
+<button class="simple-ajax btn btn-red right" {if $debugMode !== true}data-confirm="Opravdu si přejete přegenerovat celou aplikaci? Ztratíte tak veškerá data!"{/if} data-ajax="{link rebuild}">Sestavit vše</button>

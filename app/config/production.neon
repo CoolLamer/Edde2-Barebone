@@ -1,0 +1,5 @@
+parameters:
+	cache:
+		prefix: sandbox-master-
+services:
+	cacheStorage: Nette\Caching\Storages\MemcachedStorage

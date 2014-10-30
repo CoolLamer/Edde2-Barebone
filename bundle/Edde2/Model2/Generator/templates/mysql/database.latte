@@ -1,0 +1,13 @@
+{*
+ * je potřeba vypnout kontrolu klíčů - jak z důvodu výstavby DB, tak z důvodu importu výchozích dat
+ *}
+SET foreign_key_checks = 0;
+
+{include 'tables.latte'}
+{include 'foreign.latte'}
+{include 'null.latte'}
+{include 'fixtures.latte'}
+SET foreign_key_checks = 1;
+{include 'unique.latte'}
+{include 'unique-group.latte'}
+{include 'index.latte'}

@@ -1,0 +1,21 @@
+common:
+	services:
+		# je nutné, protože je referovaný jinou Nette službou
+		- Edde2\Reflection\ClassLoader
+
+		# služby přetěžující služby Nette
+		- Edde2\Caching\Cache
+		- Edde2\Caching\CacheConfig
+		- Edde2\Security\Authenticator
+		- Edde2\Security\Authorizator
+		user: Edde2\Security\User
+		router: Edde2\Application\Routers\RouterFactory
+		- Edde2\Application\Routers\RouterConfig
+
+	nette:
+		latte:
+			macros:
+				- Edde2\Security\AclSupportMacro
+
+production < common:
+development < common:

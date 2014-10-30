@@ -1,0 +1,85 @@
+{contentType text/plain}
+	namespace {$namespace}\Query;
+
+	use Edde2\Model2\Query\Query;
+	{foreach $loader as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	use {$namespace}\Model\{$modelConfig->getName()}Model;
+	{/foreach}
+
+	class {$config->getName()}Query extends Query {
+		{foreach $config->getPropertyList() as $property}
+			{continueIf !$property->isBind() && $property->isVirtual() && !$property->isPrimary()}
+		/**
+		 * výchozí řazení je ASC
+		 *
+		 * @return {$config->getName()}Query|{$config->getName()}Model[]
+		 */
+		public function orderBy{$property->getCamelName()}() {
+			{if $property->isVirtual() && $property->isReference()}
+			$this->order(array('{$config->getName()}', '{$property->getReference()->getName()}'), 'ASC');
+			{else}
+			$this->order(array('{$config->getName()}', '{$property->getName()}'), 'ASC');
+			{/if}
+			return $this;
+		}
+
+		public function orderBy{$property->getCamelName()}Desc() {
+			{if $property->isVirtual() && $property->isReference()}
+			$this->order(array('{$config->getName()}', '{$property->getReference()->getName()}'), 'DESC');
+			{else}
+			$this->order(array('{$config->getName()}', '{$property->getName()}'), 'DESC');
+			{/if}
+			return $this;
+		}
+
+		{if $property->isVirtual() && $property->isBind() && $property->isReference()}
+		/**
+		 * @param {$property->getBind()->getName()}Model|null $a{$property->getBind()->getName()}
+		 *
+		 * @return {$config->getName()}Query|{$config->getName()}Model[]
+		 */
+		public function where{$property->getCamelName()}({$property->getBind()->getName()}Model $a{$property->getBind()->getName()} = null) {
+			$this->whereAnd()->eq(array('{$config->getName()}', '{$property->getReference()->getName()}'), ':where_{$property->getBind()->getName()}');
+			$this->argz(array(':where_{$property->getBind()->getName()}' => ($a{$property->getBind()->getName()} !== null ? $a{$property->getBind()->getName()}->getId() : null)));
+			return $this;
+		}
+		{else}
+		/**
+		 * @param mixed $aValue
+		 *
+		 * @return {$config->getName()}Query|{$config->getName()}Model[]
+		 */
+		public function where{$property->getCamelName()}($aValue) {
+			$this->whereAnd()->eq(array('{$config->getName()}', '{$property->getName()}'), ':where_{$property->getName()}');
+			$this->argz(array(':where_{$property->getName()}' => $aValue));
+			return $this;
+		}
+
+		public function where{$property->getCamelName()}IsNull() {
+			$this->whereAnd()->isNull(array('{$config->getName()}', '{$property->getName()}'));
+			return $this;
+		}
+
+		public function where{$property->getCamelName()}IsNotNull() {
+			$this->whereAnd()->isNotNull(array('{$config->getName()}', '{$property->getName()}'));
+			return $this;
+		}
+		{/if}{sep}
+
+{/sep}
+		{/foreach}
+
+
+		/**
+		 * vrátí model s daty získanými z aktuálního stavu dotazu; pokud je předán číselný parametr, je považován za ID, pokud řetězec, bude vyhledáno dle unikátního sloupce; pokud nic,
+		 * použije se aktuální nastavení dotazu
+		 *
+		 * @param string|int|null $aResolve
+		 *
+		 * @return {$config->getName()}Model
+		 */
+		public function load($aResolve = null) {
+			return parent::load($aResolve);
+		}
+	}

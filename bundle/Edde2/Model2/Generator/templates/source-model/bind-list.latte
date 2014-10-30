@@ -1,0 +1,85 @@
+{foreach $config->getBindList() as $property}
+	{if $property->isVirtual()}
+		{if $property->hasComment()}
+		/**
+		 * {$property->getComment()}
+		 */
+		{/if}
+		public function set{$property->getCamelName()}({$property->getBind()->getName()}Model $a{$property->getCamelName()}{if $property->isNullable()} = null{/if}) {
+			$this->bind['{$property->getName()}'] = $a{$property->getCamelName()};
+			if({if $property->isNullable()}$a{$property->getCamelName()} !== null && {/if}$a{$property->getCamelName()}->hasId()) {
+				$this->set{$property->getReference()->getCamelName()}($a{$property->getCamelName()}->getId());
+			}
+			return $this;
+		}
+
+		/**
+		{if $property->hasComment()}
+		 * {$property->getComment()}
+		 *
+		{/if}
+		 * @return {$property->getBind()->getName()}Model
+		 */
+		public function get{$property->getCamelName()}() {
+			if(isset($this->bind['{$property->getName()}'])) {
+				return $this->bind['{$property->getName()}'];
+			}
+			$this->bind['{$property->getName()}'] = $bind = $this->holder()->model{$property->getBind()->getName()}();
+			if($this->has{$property->getReference()->getCamelName()}Value()) {
+				$bind->query()->load($this->get{$property->getReference()->getCamelName()}());
+			}
+			return $bind;
+		}
+
+		public function has{$property->getCamelName()}Value() {
+			return parent::get('{$property->getName()}') !== null || isset($this->bind['{$property->getName()}']);
+		}
+
+		{if $property->getBind() === $config}
+		public function recursive{$property->getCamelName()}($aCallback) {
+			$current = $this;
+			while(true) {
+				$aCallback($current);
+				if(!$current->isChild()) {
+					break;
+				}
+				$current = $current->get{$property->getCamelName()}();
+			}
+		}
+
+		public function isParent() {
+			return count($this->collection{$property->getBind()->getName()}()->collection()) > 0;
+		}
+
+		public function isChild() {
+			return $this->has{$property->getCamelName()}Value();
+		}
+		{/if}
+	{else}
+		{if $property->hasComment()}
+		/**
+		 * {$property->getComment()}
+		 */
+		{/if}
+		protected function set{$property->getCamelName()}($aId) {
+			$this->set('{$property->getName()}', $aId);
+			return $this;
+		}
+
+		{if $property->hasComment()}
+		/**
+		 * {$property->getComment()}
+		 */
+		{/if}
+		protected function get{$property->getCamelName()}() {
+			return $this->get('{$property->getName()}');
+		}
+
+		/**
+		 * @return bool
+		 */
+		protected function has{$property->getCamelName()}Value() {
+			return $this->get{$property->getCamelName()}() !== null;
+		}
+	{/if}
+{/foreach}

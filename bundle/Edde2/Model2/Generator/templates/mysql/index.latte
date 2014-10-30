@@ -1,0 +1,8 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{var $indexList = $modelConfig->getIndexGroupList()}
+	{continueIf count($indexList) === 0}
+	{foreach $indexList as $name => $group}
+CREATE INDEX {$modelConfig->getSourceName()}_{implode('_', $group)}_idx ON {$builder->delimite($modelConfig->getSourceName())} ({foreach $group as $property}{$builder->delimite($property->getName())}{sep}, {/sep}{/foreach});
+	{/foreach}
+{/foreach}

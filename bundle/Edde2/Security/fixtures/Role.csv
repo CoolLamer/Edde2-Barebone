@@ -1,0 +1,6 @@
+Role
+name;description
+guest;nejnižší oprávnění - běžný nepřihlášený uživatel
+authenticated;běžná role přihlášeného uživatele
+user;role běžného uživatele systému
+root;hlavní administrační administrační role

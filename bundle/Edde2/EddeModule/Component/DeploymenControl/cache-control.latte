@@ -1,0 +1,9 @@
+<h3>Cache</h3>
+{control FlashMessageControl}
+<p>
+	V případě nutnosti promazat aplikační cache, je možné použít tuto komponentu; pokud nastane nějaký neobvyklý problém, je možné, že průplach pomůže, nicméně veškeré akce spojené s publikováním aplikace by neměly tuto funkci potřebovat.
+</p>
+<p>
+	Použití této komponenty je zcela bezpečné - pouze aplikaci donutí znovu dopočítat/nacucat data z databáze.
+</p>
+<button class="simple-ajax btn btn-yellow" data-ajax="{link clean}">Vymazat cache!</button>

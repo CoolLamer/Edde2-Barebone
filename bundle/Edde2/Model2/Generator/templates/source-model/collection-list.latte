@@ -1,0 +1,40 @@
+{foreach $config->getBoundList() as $bound}
+		/**
+		 * @param string $aCollectionKey klíč kolekce, dle kterého se bude ukládat index (ve výchoyím stavu ID); může být libovolná properta cílového modelu
+		 *
+		 * @return {$bound[0]->getName()}Query|{$bound[0]->getName()}Model[]
+		 */
+		public function collection{$bound[0]->getName()}($aCollectionKey = null) {
+			if(!$this->hasId()) {
+				return array();
+			}
+			return $this->holder()->query{$bound[0]->getName()}()->setCollectionKey($aCollectionKey)->where{$bound[1]->getCamelName()}Id($this->getId());
+		}
+
+		/**
+		 * @param {$bound[0]->getName()}Model|null $aModel pokud parametr není zadán, vytvoří se nový model
+		 *
+		 * @return {$bound[0]->getName()}Model
+		 */
+		public function bind{$bound[0]->getName()}({$bound[0]->getName()}Model $aModel = null) {
+			$model = $aModel ?: $this->holder()->model{$bound[0]->getName()}();
+			$model->set{$bound[1]->getCamelName()}($this);
+			$this->list['{$bound[0]->getName()}'][] = $model;
+			return $model;
+		}
+
+		/**
+		 * vrátí seznam aktuálně připojených modelů (položek pod aktuálním modelem ve vztahu 1:N); nejedná se dotaz pro kolekci
+		 *
+		 * @return {$bound[0]->getName()}Model[]
+		 */
+		public function get{$bound[0]->getName()}List() {
+			if(!isset($this->list['{$bound[0]->getName()}'])) {
+				return array();
+			}
+			return $this->list['{$bound[0]->getName()}'];
+		}
+		{sep}
+
+		{/sep}
+{/foreach}

@@ -1,0 +1,12 @@
+{foreach $configList as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	{var $uniqueList = $modelConfig->getUniqueList()}
+	{continueIf count($uniqueList) === 0}
+	{foreach $uniqueList as $property}
+		{continueIf $property->isVirtual()}
+ALTER TABLE {$builder->delimite($modelConfig->getSourceName())} ADD CONSTRAINT {$modelConfig->getSourceName()}_{$property->getName()}_ukey UNIQUE ({$builder->delimite($property->getName())});
+	{/foreach}
+{sep}
+
+{/sep}
+{/foreach}

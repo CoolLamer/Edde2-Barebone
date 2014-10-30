@@ -1,0 +1,51 @@
+{contentType text/plain}
+	/**
+	 * Tento soubor byl automaticky vygenerován modelovou službou. Jeho primárním smyslem je poskytnout nápovědu v IDE, tudíž NENÍ určen k přímé editaci.
+	 *
+	 * {date('Y-m-d H:i:s')}
+	 */
+	namespace {$namespace}\Model;
+
+	use Edde2\Model2\Holder\Holder;
+	use Edde2\Model2\Holder\HolderAccessor;
+	{foreach $loader as $modelConfig}
+	{continueIf $modelConfig->isVirtual()}
+	use {$namespace}\Query\{$modelConfig->getName()}Query;
+	{/foreach}
+
+	class {$holderClass} extends Holder {
+		{foreach $loader as $config}
+			{continueIf $config->isVirtual()}
+		/**
+		 * @return {$config->getName()}Model
+		 */
+		public function model{$config->getName()}() {
+			return $this->model('{$config->getName()}');
+		}
+
+		/**
+		 * @param {$config->getName()}Model|null $aModel
+		 *
+		 * @return {$config->getName()}Query
+		 */
+		public function query{$config->getName()}({$config->getName()}Model $aModel = null) {
+			return $this->query($aModel ?: $this->model{$config->getName()}());
+		}{sep}
+
+{/sep}
+		{/foreach}
+
+	}
+
+	/**
+	 * Tento accessor se používá pro automatické injectování {$holderClass} v rámci aplikace; tuto třídu není nutné používat přímo, ClassLoader se o její
+	 * vytvoření postará sám.
+	 */
+	class {$holderClass}Accessor extends HolderAccessor {
+		/**
+		 * @return {$holderClass}
+		 */
+		public function get() {
+			return $this->getHolder('{$holderName}');
+		}
+	}

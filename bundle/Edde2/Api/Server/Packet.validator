@@ -1,0 +1,8 @@
+name: Packet
+rule:
+	jsonrpc:
+		- Edde2\Validator\Common\NotNullValidator('Missing jsonrpc value - must be equal to "2.0"')
+		- Edde2\Validator\Common\EqualValidator('Json RPC header (jsonrpc) is not equal to "2.0"', '2.0')
+	method:
+		- Edde2\Validator\Common\NotNullValidator('Missing method property. You must specify method name.')
+		- Edde2\Validator\Common\RegExpValidator('Bad method call format. Specify <service>::<method>, eg. ApiInfoService::getServiceList.', '~^[a-z]+Service::[a-z]+$~')
