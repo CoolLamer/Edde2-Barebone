@@ -4,7 +4,6 @@
 	use Edde2\Database\Connection;
 	use Edde2\Database\ConnectionService;
 	use Edde2\Model2\Config\ILoaderService;
-	use Edde2\Model2\Config\NeonLoaderService;
 	use Edde2\Model2\Generator\DatabaseGenerator;
 	use Edde2\Model2\Generator\SourceGenerator;
 	use Edde2\Model2\Holder\Config;
@@ -60,7 +59,8 @@
 		 * @return ILoaderService
 		 */
 		public function createLoaderService($aName) {
-			return $this->classLoader->create(NeonLoaderService::getReflection()->getName(), array($this->getHolderConfig($aName)), false, false);
+			$config = $this->getHolderConfig($aName);
+			return $this->classLoader->create($config->getLoaderService(), array($config), false, false);
 		}
 
 		/**

@@ -5,6 +5,8 @@ parameters:
 	loader:
 		- %tempDir%/model
 	model:
+		# možnost definovat, které připojení holder využije; ve výchozím stavu hledá default připojení; není potřeba definovat, pokud má aplikace právě jedno připojení
+		#connection: my-app
 		# přípona souborů s modely (dle této přípony se budou vyhledávat)
 		mask: *.model
 		# kořenový adresář pro vyhledávání modelů
@@ -15,6 +17,8 @@ parameters:
 		generator:
 			path: %tempDir%/model
 		import-path: %appDir%
+		# možnost změnit třídu, která se postará o načtení konfigurace modelů
+		#loader-service: NeonLoaderService
 php:
 	date.timezone: Europe/Prague
 	zlib.output_compression: yes

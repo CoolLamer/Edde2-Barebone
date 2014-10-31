@@ -1,6 +1,7 @@
 <?php
 	namespace Edde2\Model2\Holder;
 
+	use Edde2\Model2\Config\NeonLoaderService;
 	use Edde2\Model2\Generator\Config as GeneratorConfig;
 	use Edde2\Utils\ObjectEx;
 	use Edde2\Utils\Strings;
@@ -44,15 +45,31 @@
 			return $this->get('generator');
 		}
 
+		/**
+		 * @return string|array
+		 */
 		public function getModelPath() {
 			return $this->getGenerator()->getPath();
 		}
 
+		/**
+		 * @return string
+		 */
 		public function getSourcePath() {
 			return $this->getGenerator()->getPath().'/'.$this->getName();
 		}
 
+		/**
+		 * @return string|array
+		 */
 		public function getImportPath() {
 			return $this->getOrDefault('import-path', array());
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getLoaderService() {
+			return $this->getOrDefault('loader-service', NeonLoaderService::getReflection()->getName());
 		}
 	}

@@ -3,4 +3,3 @@
 *.pid
 *.log
 .app
-/www/index.php
