@@ -25,6 +25,10 @@
 		 */
 		private $eddeLoader;
 		private $debugMode;
+		/**
+		 * @var Container
+		 */
+		private $context;
 
 		public function __construct($aRootDir) {
 			parent::__construct();
@@ -149,7 +153,15 @@
 			if(extension_loaded('Zend OPcache') && $this->isDebugMode()) {
 				opcache_reset();
 			}
-			return $context;
+			return $this->context = $context;
+		}
+
+		/**
+		 * shortcut funkce pro vytvoreni aplikace a spusteni (getService('application')->run())
+		 */
+		public function run() {
+			$this->build();
+			$this->context->getService('application')->run();
 		}
 
 		protected function getDefaultParameters() {
